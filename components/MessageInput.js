@@ -14,6 +14,31 @@ export default function MessageInput({
     inputRef.current?.focus();
   }, []);
 
+  // Listen for global keypresses to auto-focus + type
+  useEffect(() => {
+    const handleGlobalKeyPress = (e) => {
+      // Ignore if typing inside another input or modifier keys
+      if (
+        document.activeElement === inputRef.current ||
+        e.metaKey ||
+        e.ctrlKey ||
+        e.altKey
+      )
+        return;
+
+      // Focus and add typed character
+      inputRef.current?.focus();
+
+      const char = e.key.length === 1 ? e.key : '';
+      if (char) {
+        setInput((prev) => prev + char);
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyPress);
+    return () => window.removeEventListener('keydown', handleGlobalKeyPress);
+  }, []);
+
   const handleSend = () => {
     const trimmed = input.trim();
     if (!trimmed || loading) return;
