@@ -1,9 +1,17 @@
+import React, { useState } from 'react';
+import TopicSelector from '@/components/TopicSelector';
+import ChatWindow from '@/components/ChatWindow';
+
 export default function Home() {
+  const [selectedTopic, setSelectedTopic] = useState(null);
+
   return (
-    <div className='min-h-screen flex items-center justify-center bg-green-100'>
-      <h1 className='text-3xl font-bold text-purple-600'>
-        Test
-      </h1>
-    </div>
+    <>
+      {!selectedTopic ? (
+        <TopicSelector onSelectTopic={setSelectedTopic} />
+      ) : (
+        <ChatWindow topic={selectedTopic} />
+      )}
+    </>
   );
 }
