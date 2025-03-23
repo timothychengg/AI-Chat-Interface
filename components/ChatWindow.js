@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MessageBubble from './MessageBubble';
 import MessageInput from './MessageInput';
+import LoadingIndicator from './LoadingIndicator';
 
 export default function ChatWindow({ topic }) {
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -30,21 +33,16 @@ export default function ChatWindow({ topic }) {
         {messages.map((msg, index) => (
           <MessageBubble key={index} message={msg} />
         ))}
+        {loading && <LoadingIndicator />}
         <div ref={messagesEndRef} />
       </div>
 
       <div className='border-t p-4 bg-gray-50 text-center text-gray-500'>
         <MessageInput
-          onSend={(text) => {
-            setMessages((prev) => [...prev, { sender: 'user', text }]);
-
-            setTimeout(() => {
-              setMessages((prev) => [
-                ...prev,
-                { sender: 'ai', text: `This is a response to: "${text}"` },
-              ]);
-            }, 1000);
-          }}
+          messages={messages}
+          setMessages={setMessages}
+          loading={loading}
+          setLoading={setLoading}
         />
       </div>
     </div>
