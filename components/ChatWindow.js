@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import MessageBubble from './MessageBubble';
 import MessageInput from './MessageInput';
 import LoadingIndicator from './LoadingIndicator';
+import { loadMessages, saveMessages } from '@/services/storage';
 
 export default function ChatWindow({ topic }) {
   const [messages, setMessages] = useState([]);
@@ -14,14 +15,15 @@ export default function ChatWindow({ topic }) {
   }, [messages]);
 
   useEffect(() => {
-    setMessages([
-      { sender: 'user', text: 'Hi there!' },
-      {
-        sender: 'ai',
-        text: `Hello! How can I assist you with ${topic.toLowerCase()}?`,
-      },
-    ]);
+    const stored = loadMessages(topic);
+    setMessages(stored);
   }, [topic]);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      saveMessages(topic, messages);
+    }
+  }, [messages, topic]);
 
   return (
     <div className='flex flex-col h-screen bg-white'>
