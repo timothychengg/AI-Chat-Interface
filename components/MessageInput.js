@@ -9,15 +9,13 @@ export default function MessageInput({
   const [input, setInput] = useState('');
   const inputRef = useRef(null);
 
-  // Auto-focus on mount
+
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
-  // Listen for global keypresses to auto-focus + type
   useEffect(() => {
     const handleGlobalKeyPress = (e) => {
-      // Ignore if typing inside another input or modifier keys
       if (
         document.activeElement === inputRef.current ||
         e.metaKey ||
@@ -26,7 +24,6 @@ export default function MessageInput({
       )
         return;
 
-      // Focus and add typed character
       inputRef.current?.focus();
 
       const char = e.key.length === 1 ? e.key : '';
