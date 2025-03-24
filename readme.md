@@ -1,26 +1,26 @@
-# Laer Health AI Chat Interface 💬🩺
+# Laer Health AI Chat Interface
 
 A modern, responsive ChatGPT-style interface built as a take-home project for Laer Health. This interface simulates how healthcare providers might interact with AI tools in clinical and non-clinical workflows.
 
 ---
 
-## 🚀 Features
+## Features
 
-- ✅ **Responsive UI** for both desktop and mobile
-- ✅ **Conversation topic selector** for healthcare use cases
-- ✅ **Chat interface** with clean user/AI message components
-- ✅ **Voice input** via Web Speech API 🎤
-- ✅ **File upload support** (.txt, .pdf, .docx)
-- ✅ **Typing/loading indicator**
-- ✅ **Persistent chat memory** using `localStorage`
-- ✅ **Export chat to TXT and PDF**
-- ✅ **Reset and clear chat history**
-- ✅ **Back button** to return to topic selection
-- ✅ **Smooth, intuitive UX with Tailwind styling**
+- 1. **Responsive UI** for both desktop and mobile
+- 2. **Conversation topic selector** for healthcare use cases
+- 3. **Chat interface** with clean user/AI message components
+- 4. **Voice input** via Web Speech API 🎤
+- 5. **File upload support** (.txt, .pdf, .docx)
+- 6. **Typing/loading indicator**
+- 7. **Persistent chat memory** using `localStorage`
+- 8. **Export chat to TXT and PDF**
+- 9. **Reset and clear chat history**
+- 10. **Back button** to return to topic selection
+- 11. **Smooth, intuitive UX with Tailwind styling**
 
 ---
 
-## 🧠 Architecture
+## Architecture
 
 - **React (with Next.js Pages Router)** — Modular component-based UI
 - **Component Breakdown:**
@@ -35,7 +35,7 @@ A modern, responsive ChatGPT-style interface built as a take-home project for La
 
 ---
 
-## 🧪 Optional Unit Tests
+## Optional Unit Tests
 
 This version focuses on frontend behavior — tests can easily be added using `Jest` and `React Testing Library`.
 
@@ -47,7 +47,7 @@ Suggested test coverage:
 
 ---
 
-## 📦 Tech Stack
+## Tech Stack
 
 | Tool                    | Usage                   |
 | ----------------------- | ----------------------- |
@@ -78,7 +78,7 @@ Then visit: [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## 🧑‍⚕️ Use Case Context
+## Use Case Context
 
 This application is designed to simulate how healthcare providers can interact with AI-based tools within clinical workflows.
 
@@ -91,26 +91,3 @@ It supports use cases like:
 Each interaction happens inside a chat interface that feels intuitive, friendly, and accessible across devices.
 
 ---
-
-## 📁 Project Structure
-
-```bash
-├── components/
-│   ├── ChatWindow.js       # Main chat screen
-│   ├── MessageInput.js     # Input bar with voice + send
-│   ├── MessageBubble.js    # User + AI message styling
-│   ├── LoadingIndicator.js # AI typing animation
-│   └── TopicSelector.js    # Pre-chat topic selection UI
-│
-├── services/
-│   └── storage.js          # localStorage-based memory
-│
-├── pages/
-│   └── index.js            # Next.js main route
-│
-├── public/
-├── styles/
-├── README.md
-└── package.json
-
-```
