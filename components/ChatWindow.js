@@ -8,21 +8,15 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 export default function ChatWindow({ topic }) {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(() => loadMessages(topic));
   const [loading, setLoading] = useState(false);
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);
+
   const messagesEndRef = useRef(null);
   const chatRef = useRef(null);
 
   useEffect(() => {
-    const stored = loadMessages(topic);
-    setMessages(stored);
-  }, [topic]);
-
-  useEffect(() => {
-    if (messages.length > 0) {
-      saveMessages(topic, messages);
-    }
+    saveMessages(topic, messages);
   }, [messages, topic]);
 
   useEffect(() => {
@@ -87,52 +81,34 @@ export default function ChatWindow({ topic }) {
       .map((msg) => `${msg.sender === 'user' ? 'You' : 'AI'}: ${msg.text}`)
       .join('\n\n');
     const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = url;
+    link.href = URL.createObjectURL(blob);
     link.download = `laer_chat_${topic}.txt`;
-    document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    URL.revokeObjectURL(link.href);
   };
 
   const handleExportPDF = async () => {
-    try {
-      if (!chatRef.current) return;
+    if (!chatRef.current) return;
 
-      const tempStyle = document.createElement('style');
-      tempStyle.innerHTML = `
-        * {
-          background: #ffffff !important;
-          color: #000000 !important;
-        }
-      `;
-      document.head.appendChild(tempStyle);
+    const styleBackup = chatRef.current.style.backgroundImage;
+    chatRef.current.style.backgroundImage = 'none';
+    chatRef.current.style.backgroundColor = '#ffffff';
 
-      const originalBg = chatRef.current.style.backgroundImage;
-      chatRef.current.style.backgroundImage = 'none';
-      chatRef.current.style.backgroundColor = '#ffffff';
+    const canvas = await html2canvas(chatRef.current, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+    });
 
-      const canvas = await html2canvas(chatRef.current, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff',
-      });
+    chatRef.current.style.backgroundImage = styleBackup;
 
-      chatRef.current.style.backgroundImage = originalBg;
-      document.head.removeChild(tempStyle);
-
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`laer_chat_${topic}.pdf`);
-    } catch (error) {
-      console.error('Failed to export PDF:', error);
-    }
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save(`laer_chat_${topic}.pdf`);
   };
 
   return (
@@ -200,7 +176,7 @@ export default function ChatWindow({ topic }) {
           {loading && <LoadingIndicator />}
           <div ref={messagesEndRef} />
 
-          {isScrolledToBottom === false && (
+          {!isScrolledToBottom && (
             <div className='absolute bottom-0 left-0 w-full h-4 bg-gradient-to-t from-[#F9FAFB] to-transparent z-10 pointer-events-none' />
           )}
         </div>
