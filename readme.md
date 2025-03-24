@@ -6,17 +6,17 @@ A modern, responsive ChatGPT-style interface built as a take-home project for La
 
 ## Features
 
-- 1. **Responsive UI** for both desktop and mobile
-- 2. **Conversation topic selector** for healthcare use cases
-- 3. **Chat interface** with clean user/AI message components
-- 4. **Voice input** via Web Speech API 🎤
-- 5. **File upload support** (.txt, .pdf, .docx)
-- 6. **Typing/loading indicator**
-- 7. **Persistent chat memory** using `localStorage`
-- 8. **Export chat to TXT and PDF**
-- 9. **Reset and clear chat history**
-- 10. **Back button** to return to topic selection
-- 11. **Smooth, intuitive UX with Tailwind styling**
+- **Responsive UI** for both desktop and mobile
+- **Conversation topic selector** for healthcare use cases
+- **Chat interface** with clean user/AI message components
+- **Voice input** via Web Speech API 🎤
+- **File upload support** (.txt, .pdf, .docx)
+- **Typing/loading indicator**
+- **Persistent chat memory** using `localStorage`
+- **Export chat to TXT and PDF**
+- **Reset and clear chat history**
+- **Back button** to return to topic selection
+- **Smooth, intuitive UX with Tailwind styling**
 
 ---
 
