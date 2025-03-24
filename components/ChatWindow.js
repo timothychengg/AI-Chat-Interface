@@ -98,15 +98,41 @@ export default function ChatWindow({ topic }) {
   };
 
   const handleExportPDF = async () => {
-    if (!chatRef.current) return;
-    const canvas = await html2canvas(chatRef.current);
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`laer_chat_${topic}.pdf`);
+    try {
+      if (!chatRef.current) return;
+
+      const tempStyle = document.createElement('style');
+      tempStyle.innerHTML = `
+        * {
+          background: #ffffff !important;
+          color: #000000 !important;
+        }
+      `;
+      document.head.appendChild(tempStyle);
+
+      const originalBg = chatRef.current.style.backgroundImage;
+      chatRef.current.style.backgroundImage = 'none';
+      chatRef.current.style.backgroundColor = '#ffffff';
+
+      const canvas = await html2canvas(chatRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+      });
+
+      chatRef.current.style.backgroundImage = originalBg;
+      document.head.removeChild(tempStyle);
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`laer_chat_${topic}.pdf`);
+    } catch (error) {
+      console.error('Failed to export PDF:', error);
+    }
   };
 
   return (
