@@ -29,7 +29,6 @@ export default function MessageInput({
         setInput((prev) => prev + char);
       }
     };
-
     window.addEventListener('keydown', handleGlobalKeyPress);
     return () => window.removeEventListener('keydown', handleGlobalKeyPress);
   }, []);
@@ -38,14 +37,21 @@ export default function MessageInput({
     const trimmed = input.trim();
     if (!trimmed || loading) return;
 
-    setMessages([...messages, { sender: 'user', text: trimmed }]);
+    setMessages([
+      ...messages,
+      { sender: 'user', text: trimmed, timestamp: Date.now() },
+    ]);
     setInput('');
     setLoading(true);
 
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
-        { sender: 'ai', text: `This is a response to: "${trimmed}"` },
+        {
+          sender: 'ai',
+          text: `This is a response to: "${trimmed}"`,
+          timestamp: Date.now(),
+        },
       ]);
       setLoading(false);
     }, 1000);
@@ -84,10 +90,10 @@ export default function MessageInput({
   };
 
   return (
-    <div className='border-t p-4 bg-white flex items-center gap-2'>
+    <div className='flex items-center gap-3'>
       <textarea
         ref={inputRef}
-        className='flex-1 border rounded-lg p-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500'
+        className='flex-1 bg-gray-100 border border-gray-300 rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm text-gray-900'
         rows={1}
         placeholder='Type a message...'
         value={input}
@@ -97,8 +103,7 @@ export default function MessageInput({
       />
       <button
         onClick={handleVoiceInput}
-        className='bg-gray-200 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-300 transition-all disabled:opacity-50'
-        type='button'
+        className='text-xl text-gray-500 hover:text-blue-600 transition disabled:opacity-50'
         disabled={loading}
         title='Start voice input'
       >
@@ -106,7 +111,7 @@ export default function MessageInput({
       </button>
       <button
         onClick={handleSend}
-        className='bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all disabled:opacity-50'
+        className='bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition disabled:opacity-50 text-sm'
         disabled={loading}
       >
         Send

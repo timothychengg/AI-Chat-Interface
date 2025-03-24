@@ -10,7 +10,10 @@ export default function Home() {
       {!selectedTopic ? (
         <TopicSelector onSelectTopic={setSelectedTopic} />
       ) : (
-        <ChatWindow topic={selectedTopic} />
+        <ChatWindow
+          topic={selectedTopic}
+          goBack={() => setSelectedTopic(null)}
+        />
       )}
     </>
   );
