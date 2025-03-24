@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
 import { FaArrowLeft } from 'react-icons/fa';
 import MessageBubble from './MessageBubble';
 import MessageInput from './MessageInput';
@@ -7,16 +8,23 @@ import { loadMessages, saveMessages, clearMessages } from '@/services/storage';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
-export default function ChatWindow({ topic }) {
-  const [messages, setMessages] = useState(() => loadMessages(topic));
+export default function ChatWindow({ topic, goBack }) {
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(true);
-
   const messagesEndRef = useRef(null);
   const chatRef = useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
-    saveMessages(topic, messages);
+    const stored = loadMessages(topic);
+    setMessages(stored);
+  }, [topic]);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      saveMessages(topic, messages);
+    }
   }, [messages, topic]);
 
   useEffect(() => {
@@ -81,40 +89,58 @@ export default function ChatWindow({ topic }) {
       .map((msg) => `${msg.sender === 'user' ? 'You' : 'AI'}: ${msg.text}`)
       .join('\n\n');
     const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
+    link.href = url;
     link.download = `laer_chat_${topic}.txt`;
+    document.body.appendChild(link);
     link.click();
-    URL.revokeObjectURL(link.href);
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const handleExportPDF = async () => {
-    if (!chatRef.current) return;
+    try {
+      if (!chatRef.current) return;
 
-    const styleBackup = chatRef.current.style.backgroundImage;
-    chatRef.current.style.backgroundImage = 'none';
-    chatRef.current.style.backgroundColor = '#ffffff';
+      const tempStyle = document.createElement('style');
+      tempStyle.innerHTML = `
+        * {
+          background: #ffffff !important;
+          color: #000000 !important;
+        }
+      `;
+      document.head.appendChild(tempStyle);
 
-    const canvas = await html2canvas(chatRef.current, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: '#ffffff',
-    });
+      const originalBg = chatRef.current.style.backgroundImage;
+      chatRef.current.style.backgroundImage = 'none';
+      chatRef.current.style.backgroundColor = '#ffffff';
 
-    chatRef.current.style.backgroundImage = styleBackup;
+      const canvas = await html2canvas(chatRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+      });
 
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`laer_chat_${topic}.pdf`);
+      chatRef.current.style.backgroundImage = originalBg;
+      document.head.removeChild(tempStyle);
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`laer_chat_${topic}.pdf`);
+    } catch (error) {
+      console.error('Failed to export PDF:', error);
+    }
   };
 
   return (
     <div className='relative flex justify-center items-center h-screen bg-gradient-to-br from-[#F0F4F8] to-[#E8EEF3] px-4'>
       <button
-        onClick={() => (window.location.href = '/')}
+        onClick={goBack}
         className='fixed top-4 left-4 z-50 flex items-center gap-2 text-sm text-blue-600 bg-white border border-blue-100 px-4 py-2 rounded-full shadow hover:bg-blue-50 transition'
       >
         <FaArrowLeft className='text-xs' />
@@ -176,7 +202,7 @@ export default function ChatWindow({ topic }) {
           {loading && <LoadingIndicator />}
           <div ref={messagesEndRef} />
 
-          {!isScrolledToBottom && (
+          {isScrolledToBottom === false && (
             <div className='absolute bottom-0 left-0 w-full h-4 bg-gradient-to-t from-[#F9FAFB] to-transparent z-10 pointer-events-none' />
           )}
         </div>
