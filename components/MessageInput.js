@@ -8,8 +8,8 @@ export default function MessageInput({
   setLoading,
 }) {
   const [input, setInput] = useState('');
-  const inputRef = useRef(null);
   const [isListening, setIsListening] = useState(false);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -26,9 +26,8 @@ export default function MessageInput({
         return;
 
       inputRef.current?.focus();
-      const char = e.key.length === 1 ? e.key : '';
-      if (char) {
-        setInput((prev) => prev + char);
+      if (e.key.length === 1) {
+        setInput((prev) => prev + e.key);
       }
     };
 
@@ -76,13 +75,13 @@ export default function MessageInput({
 
     recognition.onstart = () => setIsListening(true);
     recognition.onend = () => setIsListening(false);
-    recognition.onerror = (event) => {
-      console.error('Speech recognition error:', event.error);
+    recognition.onerror = (e) => {
+      console.error('Speech recognition error:', e.error);
       setIsListening(false);
     };
 
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
+    recognition.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
       setInput((prev) => (prev ? `${prev} ${transcript}` : transcript));
     };
 
@@ -93,32 +92,32 @@ export default function MessageInput({
     <div className='border-t p-4 bg-white flex items-center gap-2'>
       <textarea
         ref={inputRef}
-        className='flex-1 border rounded-lg p-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500'
         rows={1}
-        placeholder='Type a message...'
         value={input}
+        disabled={loading}
+        placeholder='Type a message...'
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
-        disabled={loading}
+        className='flex-1 border rounded-lg p-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500'
       />
       <button
         onClick={handleVoiceInput}
+        disabled={loading}
+        title='Start voice input'
+        type='button'
         className={`p-2 rounded-full transition-all ${
           isListening
             ? 'bg-blue-100 text-blue-700'
             : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
         } disabled:opacity-50`}
-        type='button'
-        disabled={loading}
-        title='Start voice input'
       >
         <FaMicrophone className='text-lg' />
       </button>
       <button
         onClick={handleSend}
-        className='bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all disabled:opacity-50'
         disabled={loading}
         title='Send Message'
+        className='bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all disabled:opacity-50'
       >
         <FaPaperPlane className='text-sm' />
       </button>
