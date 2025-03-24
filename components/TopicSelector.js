@@ -16,55 +16,74 @@ import {
 const topics = [
   {
     title: 'Symptom Checker',
-    icon: <FaHeartbeat />,
+    icon: FaHeartbeat,
     desc: 'Get help understanding your current symptoms.',
   },
   {
     title: 'Lab Result Analysis',
-    icon: <FaFlask />,
+    icon: FaFlask,
     desc: 'Break down and interpret your lab reports.',
   },
   {
     title: 'Medication Guidance',
-    icon: <FaPills />,
+    icon: FaPills,
     desc: 'Understand prescriptions, side effects, and dosage.',
   },
   {
     title: 'Mental Health Support',
-    icon: <FaBrain />,
+    icon: FaBrain,
     desc: 'Talk through emotional wellbeing and stress.',
   },
   {
     title: 'Chronic Condition Management',
-    icon: <FaUserShield />,
+    icon: FaUserShield,
     desc: 'Ongoing care for diabetes, asthma, and more.',
   },
   {
     title: 'AI for Diagnosis',
-    icon: <FaMicroscope />,
+    icon: FaMicroscope,
     desc: 'Explore AI-assisted diagnostic support.',
   },
   {
     title: 'Drug Interaction Checker',
-    icon: <FaNotesMedical />,
+    icon: FaNotesMedical,
     desc: 'Check for medication conflicts.',
   },
   {
     title: 'Pre-Surgery Preparation',
-    icon: <FaFileMedical />,
+    icon: FaFileMedical,
     desc: 'Understand what to expect and how to prepare.',
   },
   {
     title: 'Pediatric Health Guidance',
-    icon: <FaChild />,
+    icon: FaChild,
     desc: 'Support for child health, growth, and development.',
   },
   {
     title: 'Insurance Explanation',
-    icon: <FaHandHoldingMedical />,
+    icon: FaHandHoldingMedical,
     desc: 'Help decoding your coverage and benefits.',
   },
 ];
+
+function TopicCard({ topic, onSelect }) {
+  const Icon = topic.icon;
+  return (
+    <motion.button
+      key={topic.title}
+      layout
+      onClick={() => onSelect(topic.title)}
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.98 }}
+      aria-label={`Select ${topic.title}`}
+      className='bg-white border border-gray-200 hover:shadow-lg rounded-xl p-5 text-left transition-all flex flex-col items-start gap-3 hover:cursor-pointer'
+    >
+      <Icon className='text-blue-600 text-2xl' />
+      <div className='font-semibold text-gray-800 text-base'>{topic.title}</div>
+      <div className='text-sm text-gray-500'>{topic.desc}</div>
+    </motion.button>
+  );
+}
 
 export default function TopicSelector({ onSelectTopic }) {
   return (
@@ -78,25 +97,18 @@ export default function TopicSelector({ onSelectTopic }) {
         </p>
 
         <motion.div
+          layout
           className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          {topics.map((topic, idx) => (
-            <motion.button
-              key={idx}
-              onClick={() => onSelectTopic(topic.title)}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              className='bg-white border border-gray-200 hover:shadow-lg rounded-xl p-5 text-left transition-all flex flex-col items-start gap-3 hover:cursor-pointer'
-            >
-              <div className='text-blue-600 text-2xl'>{topic.icon}</div>
-              <div className='font-semibold text-gray-800 text-base'>
-                {topic.title}
-              </div>
-              <div className='text-sm text-gray-500'>{topic.desc}</div>
-            </motion.button>
+          {topics.map((topic) => (
+            <TopicCard
+              key={topic.title}
+              topic={topic}
+              onSelect={onSelectTopic}
+            />
           ))}
         </motion.div>
 
