@@ -7,14 +7,16 @@ export default function Home() {
 
   return (
     <>
-      {!selectedTopic ? (
-        <TopicSelector onSelectTopic={setSelectedTopic} />
-      ) : (
-        <ChatWindow
-          topic={selectedTopic}
-          goBack={() => setSelectedTopic(null)}
-        />
-      )}
+      <div className='min-h-screen transition-all duration-300 ease-in-out'>
+        {selectedTopic ? (
+          <ChatWindow
+            topic={selectedTopic}
+            goBack={() => setSelectedTopic(null)}
+          />
+        ) : (
+          <TopicSelector onSelectTopic={setSelectedTopic} />
+        )}
+      </div>
     </>
   );
 }
