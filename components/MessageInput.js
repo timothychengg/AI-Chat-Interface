@@ -9,12 +9,10 @@ export default function MessageInput({
   const [input, setInput] = useState('');
   const inputRef = useRef(null);
 
-  // Auto-focus on mount
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
-  // Global key typing
   useEffect(() => {
     const handleGlobalKeyPress = (e) => {
       if (
@@ -36,7 +34,6 @@ export default function MessageInput({
     return () => window.removeEventListener('keydown', handleGlobalKeyPress);
   }, []);
 
-  // Handle send
   const handleSend = () => {
     const trimmed = input.trim();
     if (!trimmed || loading) return;
@@ -61,7 +58,6 @@ export default function MessageInput({
     }
   };
 
-  // Voice input
   const handleVoiceInput = () => {
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
