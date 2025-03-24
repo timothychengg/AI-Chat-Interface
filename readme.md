@@ -64,7 +64,7 @@ Suggested test coverage:
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/YOUR_USERNAME/AI-Chat-Interface.git
+git clone https://github.com/timothychengg/AI-Chat-Interface.git
 cd AI-Chat-Interface
 
 # 2. Install dependencies
