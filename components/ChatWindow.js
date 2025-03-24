@@ -30,6 +30,35 @@ export default function ChatWindow({ topic }) {
     setMessages([]);
   };
 
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const content = reader.result;
+      setMessages((prev) => [
+        ...prev,
+        { sender: 'user', text: `Uploaded file content:\n${content}` },
+      ]);
+
+      setLoading(true);
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            sender: 'ai',
+            text: `Thanks for the upload! Here'/s what I understood from it...`,
+          },
+        ]);
+        setLoading(false);
+      }, 1000);
+    };
+
+    reader.readAsText(file);
+  };
+
   return (
     <div className='flex flex-col h-screen bg-white'>
       <div className='p-4 border-b bg-blue-600 text-white flex justify-between items-center'>
@@ -41,6 +70,16 @@ export default function ChatWindow({ topic }) {
           Reset Chat
         </button>
       </div>
+
+      <label className='cursor-pointer text-sm text-blue-600 underline hover:text-blue-800'>
+        Upload File
+        <input
+          type='file'
+          accept='.txt,.pdf,.doc,.docx'
+          onChange={handleFileUpload}
+          className='hidden'
+        />
+      </label>
 
       <div className='flex-1 overflow-y-auto px-4 py-6 space-y-4'>
         {messages.map((msg, index) => (
