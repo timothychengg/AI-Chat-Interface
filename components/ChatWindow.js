@@ -149,7 +149,7 @@ export default function ChatWindow({ topic, goBack }) {
             </button>
 
             <div>
-              <h1 className='text-lg sm:text-xl md:text-2xl font-semibold'>
+              <h1 className='text-lg sm:text-xl md:text-2xl font-semibold tracking-tight leading-snug'>
                 {topic}
               </h1>
             </div>
