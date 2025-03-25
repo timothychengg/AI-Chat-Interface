@@ -145,7 +145,7 @@ export default function ChatWindow({ topic, goBack }) {
         Back to Topics
       </button>
 
-      <div className='relative flex justify-center items-center h-screen bg-gradient-to-br from-[#F0F4F8] to-[#E8EEF3] px-4'>
+      <div className='relative flex justify-center items-center h-screen bg-gradient-to-br from-[#F0F4F8] to-[#E8EEF3] px-4 pt-16 sm:pt-8'>
         <div className='flex flex-col w-full max-w-3xl h-[92vh] bg-white rounded-2xl shadow-lg overflow-hidden'>
           <div className='flex justify-between items-center px-4 py-3 sm:px-6 sm:py-4 border-b bg-white'>
             <div>
