@@ -136,86 +136,87 @@ export default function ChatWindow({ topic, goBack }) {
   };
 
   return (
-    <>
-      <button
-        onClick={goBack}
-        className='fixed top-4 left-4 z-50 flex items-center gap-2 text-sm text-blue-600 bg-white border border-blue-100 px-4 py-2 rounded-full shadow hover:bg-blue-50 transition'
-      >
-        <FaArrowLeft className='text-xs' />
-        Back to Topics
-      </button>
+    <div className='relative flex justify-center items-center h-screen bg-gradient-to-br from-[#F0F4F8] to-[#E8EEF3] px-4'>
+      <div className='flex flex-col w-full max-w-3xl h-[92vh] bg-white rounded-2xl shadow-lg overflow-hidden'>
+        <div className='flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4 border-b bg-white'>
+          <div className='flex items-center gap-3'>
+            <button
+              onClick={goBack}
+              className='flex items-center gap-1 text-xs sm:text-sm text-blue-600 bg-white border border-blue-100 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full shadow hover:bg-blue-50 transition'
+            >
+              <FaArrowLeft className='text-[10px] sm:text-xs' />
+              Back
+            </button>
 
-      <div className='relative flex justify-center items-center h-screen bg-gradient-to-br from-[#F0F4F8] to-[#E8EEF3] px-4 pt-16 sm:pt-8'>
-        <div className='flex flex-col w-full max-w-3xl h-[92vh] bg-white rounded-2xl shadow-lg overflow-hidden'>
-          <div className='flex justify-between items-center px-4 py-3 sm:px-6 sm:py-4 border-b bg-white'>
             <div>
-              <h1 className='text-base sm:text-lg font-semibold'>Chat Topic</h1>
-              <p className='text-sm text-gray-500'>{topic}</p>
-            </div>
-            <div className='flex gap-2'>
-              <button
-                onClick={handleExportTxt}
-                className='text-xs sm:text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 transition'
-              >
-                Export TXT
-              </button>
-              <button
-                onClick={handleExportPDF}
-                className='text-xs sm:text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 transition'
-              >
-                Export PDF
-              </button>
-              <button
-                onClick={handleReset}
-                className='text-xs sm:text-sm bg-red-50 text-red-600 px-3 py-1 rounded-full hover:bg-red-100 transition'
-              >
-                Reset
-              </button>
+              <h1 className='text-lg sm:text-xl md:text-2xl font-semibold'>
+                {topic}
+              </h1>
             </div>
           </div>
-
-          <div className='px-4 py-2 sm:px-6 sm:py-3 border-b bg-white'>
-            <label className='cursor-pointer text-sm text-blue-600 underline hover:text-blue-800'>
-              Upload File
-              <input
-                type='file'
-                accept='.txt,.pdf,.doc,.docx'
-                onChange={handleFileUpload}
-                className='hidden'
-              />
-            </label>
-          </div>
-
-          <div
-            className='relative flex-1 overflow-y-auto px-4 py-3 sm:px-6 sm:py-4 space-y-4 bg-[#F9FAFB] pb-[80px]'
-            ref={chatRef}
-          >
-            {!isScrolledToBottom && (
-              <div className='absolute top-0 left-0 w-full h-4 bg-gradient-to-b from-[#F9FAFB] to-transparent z-10 pointer-events-none' />
-            )}
-
-            {messages.map((msg, index) => (
-              <MessageBubble key={index} message={msg} />
-            ))}
-
-            {loading && <LoadingIndicator />}
-            <div ref={messagesEndRef} />
-
-            {isScrolledToBottom === false && (
-              <div className='absolute bottom-0 left-0 w-full h-4 bg-gradient-to-t from-[#F9FAFB] to-transparent z-10 pointer-events-none' />
-            )}
-          </div>
-
-          <div className='sticky bottom-0 bg-white border-t p-4 sm:p-3 z-10'>
-            <MessageInput
-              messages={messages}
-              setMessages={setMessages}
-              loading={loading}
-              setLoading={setLoading}
-            />
+          <div className='flex gap-2'>
+            <button
+              onClick={handleExportTxt}
+              className='text-xs sm:text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 transition'
+            >
+              Export TXT
+            </button>
+            <button
+              onClick={handleExportPDF}
+              className='text-xs sm:text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 transition'
+            >
+              Export PDF
+            </button>
+            <button
+              onClick={handleReset}
+              className='text-xs sm:text-sm bg-red-50 text-red-600 px-3 py-1 rounded-full hover:bg-red-100 transition'
+            >
+              Reset
+            </button>
           </div>
         </div>
+
+        <div className='px-4 py-2 sm:px-6 sm:py-3 border-b bg-white'>
+          <label className='cursor-pointer text-sm text-blue-600 underline hover:text-blue-800'>
+            Upload File
+            <input
+              type='file'
+              accept='.txt,.pdf,.doc,.docx'
+              onChange={handleFileUpload}
+              className='hidden'
+            />
+          </label>
+        </div>
+
+        <div
+          className='relative flex-1 overflow-y-auto px-4 py-3 sm:px-6 sm:py-4 space-y-4 bg-[#F9FAFB] pb-[80px]'
+          ref={chatRef}
+        >
+          {!isScrolledToBottom && (
+            <div className='absolute top-0 left-0 w-full h-4 bg-gradient-to-b from-[#F9FAFB] to-transparent z-10 pointer-events-none' />
+          )}
+
+          {messages.map((msg, index) => (
+            <MessageBubble key={index} message={msg} />
+          ))}
+
+          {loading && <LoadingIndicator />}
+          <div ref={messagesEndRef} />
+
+          {isScrolledToBottom === false && (
+            <div className='absolute bottom-0 left-0 w-full h-4 bg-gradient-to-t from-[#F9FAFB] to-transparent z-10 pointer-events-none' />
+          )}
+        </div>
+
+        <div className='sticky bottom-0 bg-white border-t p-4 sm:p-3 z-10'>
+          <MessageInput
+            messages={messages}
+            setMessages={setMessages}
+            loading={loading}
+            setLoading={setLoading}
+          />
+        </div>
       </div>
-    </>
+    </div>
   );
 }
