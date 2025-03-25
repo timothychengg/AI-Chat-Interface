@@ -2,8 +2,6 @@
 
 A modern, responsive ChatGPT-style interface built as a take-home project for Laer Health. This interface simulates how healthcare providers might interact with AI tools in clinical and non-clinical workflows.
 
-## Live Demo
-
 ## [Click here to try it out](https://laer-chat-pfsojd4za-timothy-chengs-projects.vercel.app)
 
 ## Features
