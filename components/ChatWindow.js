@@ -146,7 +146,7 @@ export default function ChatWindow({ topic, goBack }) {
             >
               <FaArrowLeft className='text-xs' />
             </button>
-            <h1 className='text-base sm:text-lg font-semibold'>{topic}</h1>
+            <h1 className='text-xl sm:text-lg font-semibold'>{topic}</h1>
           </div>
 
           <div className='flex gap-2 items-center'>
