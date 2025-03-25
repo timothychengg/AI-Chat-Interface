@@ -105,7 +105,7 @@ export default function MessageInput({
         disabled={loading}
         title='Start voice input'
         type='button'
-        className={`p-2 rounded-full transition-all ${
+        className={`p-2 rounded-full transition-all cursor-pointer ${
           isListening
             ? 'bg-blue-100 text-blue-700'
             : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -117,7 +117,7 @@ export default function MessageInput({
         onClick={handleSend}
         disabled={loading}
         title='Send Message'
-        className='bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all disabled:opacity-50'
+        className='bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all disabled:opacity-50 cursor-pointer'
       >
         <FaPaperPlane className='text-sm' />
       </button>

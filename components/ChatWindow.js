@@ -137,55 +137,51 @@ export default function ChatWindow({ topic, goBack }) {
 
   return (
     <div className='relative flex justify-center items-center h-screen bg-gradient-to-br from-[#F0F4F8] to-[#E8EEF3] px-4'>
-      <div className='flex flex-col w-full max-w-3xl h-[92vh] bg-white rounded-2xl shadow-lg overflow-hidden'>
+      <div className='flex flex-col w-full max-w-3xl h-[92vh] bg-gray rounded-2xl shadow-lg overflow-hidden'>
         <div className='flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4 border-b bg-white'>
           <div className='flex items-center gap-3'>
             <button
               onClick={goBack}
-              className='flex items-center gap-1 text-xs sm:text-sm text-blue-600 bg-white border border-blue-100 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full shadow hover:bg-blue-50 transition'
+              className='flex items-center gap-2 text-sm text-blue-600 bg-white border border-blue-100 px-3 py-1 rounded-full shadow hover:bg-blue-50 transition cursor-pointer'
             >
-              <FaArrowLeft className='text-[10px] sm:text-xs' />
-              Back
+              <FaArrowLeft className='text-xs' />
             </button>
-
-            <div>
-              <h1 className='text-lg sm:text-xl md:text-2xl font-semibold tracking-tight leading-snug'>
-                {topic}
-              </h1>
-            </div>
+            <h1 className='text-base sm:text-lg font-semibold'>{topic}</h1>
           </div>
-          <div className='flex gap-2'>
-            <button
-              onClick={handleExportTxt}
-              className='text-xs sm:text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 transition'
-            >
-              Export TXT
-            </button>
-            <button
-              onClick={handleExportPDF}
-              className='text-xs sm:text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 transition'
-            >
-              Export PDF
-            </button>
-            <button
-              onClick={handleReset}
-              className='text-xs sm:text-sm bg-red-50 text-red-600 px-3 py-1 rounded-full hover:bg-red-100 transition'
-            >
-              Reset
-            </button>
-          </div>
-        </div>
 
-        <div className='px-4 py-2 sm:px-6 sm:py-3 border-b bg-white'>
-          <label className='cursor-pointer text-sm text-blue-600 underline hover:text-blue-800'>
-            Upload File
+          <div className='flex gap-2 items-center'>
+            <label
+              htmlFor='file-upload'
+              className='text-xs sm:text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 transition cursor-pointer inline-flex items-center'
+            >
+              Upload File
+            </label>
             <input
+              id='file-upload'
               type='file'
               accept='.txt,.pdf,.doc,.docx'
               onChange={handleFileUpload}
               className='hidden'
             />
-          </label>
+            <button
+              onClick={handleExportTxt}
+              className='text-xs sm:text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 transition cursor-pointer'
+            >
+              Export TXT
+            </button>
+            <button
+              onClick={handleExportPDF}
+              className='text-xs sm:text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 transition cursor-pointer'
+            >
+              Export PDF
+            </button>
+            <button
+              onClick={handleReset}
+              className='text-xs sm:text-sm bg-red-50 text-red-600 px-3 py-1 rounded-full hover:bg-red-100 transition cursor-pointer'
+            >
+              Reset
+            </button>
+          </div>
         </div>
 
         <div
@@ -203,7 +199,7 @@ export default function ChatWindow({ topic, goBack }) {
           {loading && <LoadingIndicator />}
           <div ref={messagesEndRef} />
 
-          {isScrolledToBottom === false && (
+          {!isScrolledToBottom && (
             <div className='absolute bottom-0 left-0 w-full h-4 bg-gradient-to-t from-[#F9FAFB] to-transparent z-10 pointer-events-none' />
           )}
         </div>
